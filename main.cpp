@@ -1,9 +1,15 @@
 #include "Gen.hpp"
+#include "Parser.hpp"
 
-int main() {
-    std::cout << "Hello, World!" << std::endl;
-    Gen gen;
+int main(int ac, char**av) {
+//    Gen gen;
+    std::string str(av[1]);
 
-    gen.Init();
+//    if grid generates by program
+//    gen.Init();
+
+    Parser parser;
+    parser.run(str);
+
     return 0;
 }
