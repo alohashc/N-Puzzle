@@ -11,6 +11,7 @@
 #include <unordered_set>
 #include <iostream>
 
+
 class Gen {
 public:
     Gen();

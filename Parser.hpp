@@ -5,7 +5,7 @@
 #ifndef ALOHA_PUZZLE_PARSER_HPP
 #define ALOHA_PUZZLE_PARSER_HPP
 
-#include "State.hpp"
+#include "Field.hpp"
 #include <iostream>
 #include <fstream>
 #include <regex>
@@ -15,12 +15,12 @@ public:
     Parser();
     ~Parser();
 
-    void run(std::string &);
-    void set_state(std::vector<std::string> &);
+    void run(char **);
 
 private:
-    State start;
-    int     grid_size;
+    Field   *start;
+    int    field_size;
+    int    field_rows;
 };
 
 
