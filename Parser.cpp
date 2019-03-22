@@ -3,8 +3,11 @@
 //
 
 #include "Parser.hpp"
+#include "Heuristics.hpp"
 
-Parser::Parser() {
+Parser::Parser(char **av) {
+    this->isValidInputArgs(av);
+    this->run();
 
 }
 
@@ -13,8 +16,25 @@ Parser::~Parser() {
 }
 
 
-void Parser::run(char **av) {
+void Parser::run() {
+    std::regex comments(R"(^#[a-zA-Z\s\d]+|^\s+#[a-zA-Z\s\d]+|^[\d\s]+#[a-zA-Z\s\d]+)");
+    std::regex values("\\d+");
+    std::string line;
 
+    while (getline(this->ifs, line)) {
+        auto begin = std::regex_iterator<std::string::iterator>(line.begin(), line.end(), values);
+        auto end = std::regex_iterator<std::string::iterator>();
+
+        for (std::regex_iterator<std::string::iterator> it = begin; it != end; ++it) {
+
+        }
+    }
+}
+
+void Parser::isValidInputArgs(char **av) {
+    this->ifs.exceptions(std::ifstream::failbit | std::ifstream::badbit);
+    this->ifs.open(av[1]);
+    this->ifs.exceptions(std::ifstream::badbit);
 }
 
 //// TODO: CHECK IF PASS DIRECTORY INSTEAD FILE

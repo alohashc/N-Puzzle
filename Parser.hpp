@@ -12,15 +12,17 @@
 
 class Parser {
 public:
-    Parser();
+    Parser(char **);
     ~Parser();
 
-    void run(char **);
+    void run();
+    void isValidInputArgs(char **);
 
 private:
     Field   *start;
     int    field_size;
     int    field_rows;
+    std::ifstream ifs;
 };
 
 
