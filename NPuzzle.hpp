@@ -9,6 +9,9 @@
 #include <vector>
 #include "Exceptions.hpp"
 
+#define MIN_ROWS 3
+#define MAX_ROWS 5
+
 struct s_pos{
     int x;
     int y;

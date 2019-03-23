@@ -8,7 +8,7 @@ Exceptions::Exceptions() : std::exception() {
 
 }
 
-Exceptions::Exceptions(std::string &str) {
+Exceptions::Exceptions(const std::string &str) {
     this->msg = str;
 }
 

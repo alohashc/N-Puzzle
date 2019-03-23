@@ -9,6 +9,7 @@
 #include <iostream>
 #include <fstream>
 #include <regex>
+#include <set>
 
 class Parser {
 public:
@@ -16,12 +17,15 @@ public:
     ~Parser();
 
     void run();
-    void isValidInputArgs(char **);
+    void isValidInputArgs(char *);
+    void isValidGrid(int);
+    void isValidTile(int);
 
 private:
     Field   *start;
     int    field_size;
     int    field_rows;
+    std::set<int> setOfValues;
     std::ifstream ifs;
 };
 

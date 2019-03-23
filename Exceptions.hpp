@@ -12,8 +12,8 @@
 class Exceptions : public std::exception{
 public:
     Exceptions();
-    Exceptions(std::string &);
-    virtual ~Exceptions() throw();
+    Exceptions(const std::string &);
+    ~Exceptions() throw();
 
     virtual char const* what() const throw();
 private:
