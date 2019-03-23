@@ -9,7 +9,7 @@
 #include <iostream>
 #include <fstream>
 #include <regex>
-#include <set>
+#include <unordered_set>
 
 class Parser {
 public:
@@ -20,13 +20,17 @@ public:
     void isValidInputArgs(char *);
     void isValidGrid(int);
     void isValidTile(int);
+    void setStartField();
+
+    void print_grid();
 
 private:
     Field   *start;
     int    field_size;
     int    field_rows;
-    std::set<int> setOfValues;
+    std::unordered_set<int> setOfValues;
     std::ifstream ifs;
+    int     cnt;
 };
 
 
