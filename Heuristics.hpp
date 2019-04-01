@@ -15,11 +15,14 @@ public:
     Heuristics();
     ~Heuristics();
 
-    static void init();
-    static void setH(std::string &h);
+    void init(std::string&, s_tile *, int);
 
 private:
-    int     manhattan(s_tile *tile, int size);
+    int     manhattan();
+    std::string name;
+    s_tile *tile;
+    int     size;
+    std::map<std::string, int (Heuristics::*)()> heuristics;
 };
 
 

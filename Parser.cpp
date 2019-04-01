@@ -9,6 +9,7 @@ Parser::Parser(char **av) {
     this->cnt = 0;
     this->start = new Field();
     this->isValidInputArgs(av[1]);
+    this->heuristic = av[2];
     this->run();
 
 }
@@ -21,10 +22,6 @@ void Parser::print_grid() {
     for (int setOfValue : this->setOfValues)
         std::cerr << setOfValue << std::endl;
     std::cout << "---------------" << std::endl;
-}
-
-void Parser::setStartField() {
-//    this->start->init();
 }
 
 void Parser::isValidTile(int value) {
@@ -44,7 +41,7 @@ void Parser::isValidGrid(int rows) {
         throw Exceptions("Error: Invalid rows value");
     this->field_rows = rows;
     this->field_size = rows * rows;
-    this->start->init(this->field_size, rows);
+    this->start->init(this->field_size, rows, this->heuristic);
 }
 
 void Parser::run() {

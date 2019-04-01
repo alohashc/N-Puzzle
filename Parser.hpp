@@ -20,7 +20,6 @@ public:
     void isValidInputArgs(char *);
     void isValidGrid(int);
     void isValidTile(int);
-    void setStartField();
 
     void print_grid();
 
@@ -30,6 +29,7 @@ private:
     int    field_rows;
     std::unordered_set<int> setOfValues;
     std::ifstream ifs;
+    std::string   heuristic;
     int     cnt;
 };
 

@@ -7,20 +7,23 @@
 
 #include <iostream>
 #include <vector>
+#include <utility>
 #include "Exceptions.hpp"
 
 #define MIN_ROWS 3
 #define MAX_ROWS 5
 
-struct s_pos{
-    int x;
-    int y;
-};
+//struct s_pos{
+//    int x;
+//    int y;
+//};
 
 struct  s_tile {
     int     value;
-    s_pos   curr_pos;
-    s_pos   end_pos;
+//    s_pos   curr_pos;
+//    s_pos   end_pos;
+    std::pair<int, int> curr_pos;
+    std::pair<int, int> end_pos;
 };
 
 struct s_state{
