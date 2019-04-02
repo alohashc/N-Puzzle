@@ -25,6 +25,7 @@ public:
     void genSolvedGrid();
     s_tile * getTiles() const;
     int &getSize();
+    int getHeuristic(s_tile*);
     void print_tiles();
     void print_target();
 

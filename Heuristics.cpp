@@ -23,11 +23,18 @@ Heuristics& Heuristics::operator=(const Heuristics &src) {
     this->heuristics = src.heuristics;
 }
 
-void Heuristics::init(std::string & name, s_tile *tiles, int size) {
+int Heuristics::getH(s_tile *tiles) {
+    this->tile = tiles;
+    int (Heuristics::*f)();
+    f = this->heuristics.at(this->name);
+
+    return (this->*f)();
+}
+
+void Heuristics::init(std::string & name, int size) {
     if (!this->heuristics[name])
         throw Exceptions("Error: Invalid heuristic");
     this->name = name;
-    this->tile = tiles;
     this->size = size;
 }
 

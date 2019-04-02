@@ -40,6 +40,10 @@ int& Field::getSize() {
     return this->field_size;
 }
 
+int Field::getHeuristic(s_tile *tiles) {
+    return this->heuristics.getH(tiles);
+}
+
 void Field::genSolvedGrid() {
     int val = 1;
     int left = 0;
@@ -111,5 +115,5 @@ void Field::init(int size, int rows, std::string & heuristic) {
     this->field_rows = rows;
     this->tiles = new s_tile[this->field_size];
     this->genSolvedGrid();
-    this->heuristics.init(heuristic, this->tiles, size);
+    this->heuristics.init(heuristic, size);
 }

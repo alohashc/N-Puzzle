@@ -16,7 +16,8 @@ public:
     ~Heuristics();
 
     Heuristics &operator=(const Heuristics &rhs);
-    void init(std::string&, s_tile *, int);
+    int getH(s_tile*);
+    void init(std::string&, int);
 
 private:
     int     manhattan();

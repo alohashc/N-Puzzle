@@ -6,6 +6,7 @@
 #define ALOHA_PUZZLE_SOLVER_HPP
 
 #include "Field.hpp"
+#include <queue>
 
 class Solver {
 public:
@@ -15,12 +16,13 @@ public:
     void init(Field*);
 
     void aStar();
-    std::string & genHash(s_tile*);
+    std::string genHash(s_tile*);
 
 private:
     Field *field;
-    std::map<std::string, int> open;
-    std::map<std::string, int> closed;
+    std::map<std::string, int> open;     // <HASH, F>
+    std::map<std::string, int> closed;   // <HASH, F>
+    std::priority_queue<s_state, std::vector<s_state>, s_cmp>	queue;
 };
 
 
