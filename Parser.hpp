@@ -20,6 +20,7 @@ public:
     void isValidInputArgs(char *);
     void isValidGrid(int);
     void isValidTile(int);
+    Field* getField();
 
     void print_grid();
 

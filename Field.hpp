@@ -11,15 +11,20 @@
 
 class Field {
 public:
+
     Field();
     ~Field();
 
     void    init(int, int, std::string&);
     void    addTile(int, int);
 
+    Field &operator=(const Field &);
+
 
     int findFinalPos(int);
     void genSolvedGrid();
+    s_tile * getTiles() const;
+    int &getSize();
     void print_tiles();
     void print_target();
 

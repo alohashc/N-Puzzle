@@ -5,11 +5,24 @@
 #include "Field.hpp"
 
 Field::Field() {
-
+    this->field_size = 0;
+    this->field_rows = 0;
+    this->gap = 0;
+    this->tiles = nullptr;
 }
+
 
 Field::~Field() {
 
+}
+
+Field& Field::operator=(const Field &src) {
+    this->field_rows = src.field_rows;
+    this->field_size = src.field_size;
+    this->gap = src.gap;
+    this->tiles = src.getTiles();
+    this->heuristics = src.heuristics;
+    this->target = src.target;
 }
 
 void Field::print_tiles() {
@@ -17,6 +30,14 @@ void Field::print_tiles() {
         std::cerr << this->tiles[i].value << std::endl;
         std::cerr << this->tiles[i].curr_pos.first << " " << this->tiles[i].curr_pos.second << std::endl;
     }
+}
+
+s_tile* Field::getTiles() const{
+    return this->tiles;
+}
+
+int& Field::getSize() {
+    return this->field_size;
 }
 
 void Field::genSolvedGrid() {
@@ -75,7 +96,7 @@ void Field::addTile(int value, int pos) {
     this->tiles[pos].curr_pos.second = pos / this->field_rows;
     this->tiles[pos].end_pos.first = solved_pos % this->field_rows;
     this->tiles[pos].end_pos.second = solved_pos / this->field_rows;
-    std::cout << this->tiles[pos].end_pos.first << this->tiles[pos].end_pos.second << std::endl;
+
     if (value == 0)
         this->gap = pos;
 }

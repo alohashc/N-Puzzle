@@ -5,14 +5,22 @@
 #ifndef ALOHA_PUZZLE_SOLVER_HPP
 #define ALOHA_PUZZLE_SOLVER_HPP
 
-#include "Heuristics.hpp"
+#include "Field.hpp"
 
 class Solver {
 public:
+    Solver(Field*);
+    ~Solver();
+
+    void init(Field*);
+
+    void aStar();
+    std::string & genHash(s_tile*);
 
 private:
-    Heuristics heuristics;
-
+    Field *field;
+    std::map<std::string, int> open;
+    std::map<std::string, int> closed;
 };
 
 

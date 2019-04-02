@@ -24,6 +24,10 @@ void Parser::print_grid() {
     std::cout << "---------------" << std::endl;
 }
 
+Field* Parser::getField() {
+    return this->start;
+}
+
 void Parser::isValidTile(int value) {
     if (value < 0 || value > this->field_size - 1)
         throw Exceptions("Error: Value out of range");
@@ -61,7 +65,7 @@ void Parser::run() {
             this->isValidTile(std::stoi((*begin).str()));
         }
     }
-    this->start->print_tiles();
+//    this->start->print_tiles();
 }
 
 void Parser::isValidInputArgs(char *filename) {

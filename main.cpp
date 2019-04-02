@@ -14,7 +14,7 @@ int main(int ac, char**av) {
     inputArgs(ac);
     try {
         Parser parser(av);
-//        Solver solver();
+        Solver solver(parser.getField());
     }
     catch (Exceptions &e) {
         e.what();

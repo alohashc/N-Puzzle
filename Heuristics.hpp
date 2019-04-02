@@ -15,6 +15,7 @@ public:
     Heuristics();
     ~Heuristics();
 
+    Heuristics &operator=(const Heuristics &rhs);
     void init(std::string&, s_tile *, int);
 
 private:

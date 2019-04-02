@@ -5,11 +5,22 @@
 #include "Heuristics.hpp"
 
 Heuristics::Heuristics() {
+    this->size = 0;
+    this->tile = nullptr;
+    this->name = "";
     this->heuristics.emplace("m", &Heuristics::manhattan);
 }
 
+
 Heuristics::~Heuristics() {
 
+}
+
+Heuristics& Heuristics::operator=(const Heuristics &src) {
+    this->name = src.name;
+    this->tile = src.tile;
+    this->size = src.size;
+    this->heuristics = src.heuristics;
 }
 
 void Heuristics::init(std::string & name, s_tile *tiles, int size) {
