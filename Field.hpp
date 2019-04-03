@@ -25,13 +25,17 @@ public:
     void genSolvedGrid();
     s_tile * getTiles() const;
     int &getSize();
+    int &getRows();
+    int &getGapPos();
     int getHeuristic(s_tile*);
+    std::string genHashEnd();
     void print_tiles();
     void print_target();
 
 private:
     int     field_size;
     int     field_rows;
+
     std::vector<int>  target;
     Heuristics heuristics;
     int     gap;

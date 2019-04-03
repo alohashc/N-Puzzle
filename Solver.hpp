@@ -7,6 +7,9 @@
 
 #include "Field.hpp"
 #include <queue>
+#include <algorithm>
+#include <sstream>
+#include <list>
 
 class Solver {
 public:
@@ -17,9 +20,17 @@ public:
 
     void aStar();
     std::string genHash(s_tile*);
+    void exitAndOutput(s_state*);
+    void getChildren(s_state*);
+    void createChildState(s_state*, int, int);
+    void swapTiles(s_tile&, s_tile&);
+    std::string print(s_tile*);
+    void printT(s_state*);
 
 private:
+    std::list<std::string>		_output;
     Field *field;
+    std::string                 hash_end;
     std::map<std::string, int> open;     // <HASH, F>
     std::map<std::string, int> closed;   // <HASH, F>
     std::priority_queue<s_state, std::vector<s_state>, s_cmp>	queue;

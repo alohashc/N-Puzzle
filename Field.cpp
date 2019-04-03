@@ -40,8 +40,24 @@ int& Field::getSize() {
     return this->field_size;
 }
 
+int& Field::getRows() {
+    return this->field_rows;
+}
+
+int& Field::getGapPos() {
+    return this->gap;
+}
+
 int Field::getHeuristic(s_tile *tiles) {
     return this->heuristics.getH(tiles);
+}
+
+std::string Field::genHashEnd() {
+    std::string hash;
+
+    for (auto it : this->target)
+       hash += std::to_string(it) + ',';
+    return hash;
 }
 
 void Field::genSolvedGrid() {
