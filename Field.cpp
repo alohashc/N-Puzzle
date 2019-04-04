@@ -69,8 +69,6 @@ void Field::genSolvedGrid() {
     int a[this->field_rows][this->field_rows];
 
     while (top < bottom && left < right) {
-        if (val == this->field_size)
-            val = 0;
         for (int i = top; i < bottom; i++)
             a[left][i] = val++;
         left++;
@@ -96,7 +94,10 @@ void Field::genSolvedGrid() {
 
     for (int i = 0; i < this->field_rows; ++i) {
         for (int j = 0; j < this->field_rows; ++j) {
-            this->target.push_back(a[i][j]);
+            if (a[i][j] == this->field_size)
+                this->target.push_back(0);
+            else
+                this->target.push_back(a[i][j]);
         }
     }
 }

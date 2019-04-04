@@ -9,6 +9,7 @@ Heuristics::Heuristics() {
     this->tile = nullptr;
     this->name = "";
     this->heuristics.emplace("m", &Heuristics::manhattan);
+    this->heuristics.emplace("mt", &Heuristics::misplacedTile);
 }
 
 
@@ -45,4 +46,16 @@ int Heuristics::manhattan() {
         res_h += std::abs(this->tile[i].curr_pos.first - this->tile[i].end_pos.first) +
                 std::abs(this->tile[i].curr_pos.second - this->tile[i].end_pos.second);
     return (res_h);
+}
+
+int Heuristics::misplacedTile() {
+    int cnt = 0;
+
+    for (int i = 0; i < this->size; ++i){
+
+        if (this->tile[i].curr_pos.first != this->tile[i].end_pos.first ||
+                this->tile[i].curr_pos.second != this->tile[i].end_pos.second)
+            cnt++;
+    }
+    return cnt;
 }

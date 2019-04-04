@@ -80,28 +80,48 @@ void Solver::getChildren(s_state *state) {
         this->createChildState(state, state->gap_pos, state->gap_pos - 1);
 }
 
+bool Solver::isExists(std::map<std::string, int>& map, s_state & state) {
+    std::map<std::string, int>::iterator	it;
+
+    it = map.find(state.hash);
+    if (it != map.end())
+    {
+        if (state.f < (*it).second)
+        {
+            map.erase(it);
+            this->_erased.insert((*it).first);
+            return false;
+        }
+        return true;
+    }
+    return false;
+}
+
 void Solver::aStar() {
     s_state curr;
 
     while (!this->queue.empty()) {
-        curr = this->queue.top();
-        this->printT(&curr);
-        this->queue.pop();
 
+        do {
+            curr = this->queue.top();
+            this->printT(&curr);
+            this->queue.pop();
+        }
+        while (this->isErased(curr.hash) && !this->queue.empty());
 
         if (curr.hash == this->hash_end)
             this->exitAndOutput(&curr);
         this->open.erase(curr.hash);
+        this->closed.emplace(curr.hash, curr.f);
 
         this->getChildren(&curr);
         for (auto it : curr.children) {
-            if (!this->closed[it.hash] && !this->open[it.hash]) {
+            if (!this->isExists(this->open, it) && !this->isExists(this->closed, it)) {
                 it.parent = new s_state(curr);
                 this->queue.push(it);
                 this->open.emplace(it.hash, it.f);
             }
         }
-        this->closed.emplace(curr.hash, curr.f);
     }
 }
 
@@ -148,4 +168,16 @@ std::string			Solver::print(s_tile * state)
         }
     }
     return (out.str());
+}
+
+bool				Solver::isErased(std::string hash)
+{
+    std::set<std::string>::iterator	it;
+
+    it = this->_erased.find(hash);
+    if (it != this->_erased.end())
+    {
+        return true;
+    }
+    return false;
 }

@@ -21,6 +21,8 @@ public:
 
 private:
     int     manhattan();
+    int     misplacedTile();
+
     std::string name;
     s_tile *tile;
     int     size;
