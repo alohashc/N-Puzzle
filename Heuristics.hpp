@@ -7,6 +7,7 @@
 
 #include "NPuzzle.hpp"
 #include <map>
+#include <cmath>
 
 typedef int (*f)(s_tile*, int);
 
@@ -22,10 +23,14 @@ public:
 private:
     int     manhattan();
     int     misplacedTile();
+    int     euclidean();
+    int		LinearConflict();
+    int     cornerTiles();
 
     std::string name;
     s_tile *tile;
     int     size;
+    int rows;
     std::map<std::string, int (Heuristics::*)()> heuristics;
 };
 

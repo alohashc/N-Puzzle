@@ -27,10 +27,12 @@ public:
     bool isExists(std::map<std::string, int> &, s_state&);
     std::string print(s_tile*);
     void printT(s_state*);
+    bool isErased(std::string hash);
 
 
 private:
     std::list<std::string>		_output;
+    std::set<std::string>		_erased;
     Field *field;
     std::string                 hash_end;
     std::map<std::string, int> open;     // <HASH, F>
