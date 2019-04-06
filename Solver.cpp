@@ -89,7 +89,6 @@ bool Solver::isExists(std::map<std::string, int>& map, s_state & state) {
         if (state.f < (*it).second)
         {
             map.erase(it);
-            this->_erased.insert((*it).first);
             return false;
         }
         return true;
@@ -101,12 +100,10 @@ void Solver::aStar() {
     s_state curr;
 
     while (!this->queue.empty()) {
-//        do {
-            curr = this->queue.top();
-//            this->printT(&curr);
-            this->queue.pop();
-//        }
-//        while (this->isErased(curr.hash) && !this->queue.empty());
+
+        curr = this->queue.top();
+        this->printT(&curr);
+        this->queue.pop();
 
         if (curr.hash == this->hash_end)
             this->exitAndOutput(&curr);
@@ -167,16 +164,4 @@ std::string			Solver::print(s_tile * state)
         }
     }
     return (out.str());
-}
-
-bool				Solver::isErased(std::string hash)
-{
-    std::set<std::string>::iterator	it;
-
-    it = this->_erased.find(hash);
-    if (it != this->_erased.end())
-    {
-        return true;
-    }
-    return false;
 }

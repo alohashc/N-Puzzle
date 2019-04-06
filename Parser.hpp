@@ -9,11 +9,12 @@
 #include <iostream>
 #include <fstream>
 #include <regex>
+#include <random>
 #include <unordered_set>
 
 class Parser {
 public:
-    Parser(char **);
+    Parser(char **, std::string&);
     ~Parser();
 
     void run();
@@ -21,12 +22,16 @@ public:
     void isValidGrid(int);
     void isValidTile(int);
     Field* getField();
+    void genSolvedField();
+    void genRandomField(int);
 
     void print_grid();
 
 private:
     Field   *start;
     int    field_size;
+    std::vector<int> solvable_pos;
+    std::vector<int> target;
     int    field_rows;
     std::unordered_set<int> setOfValues;
     std::ifstream ifs;

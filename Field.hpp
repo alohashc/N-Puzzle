@@ -15,14 +15,14 @@ public:
     Field();
     ~Field();
 
-    void    init(int, int, std::string&);
+    void    init(int, int, std::string&, std::vector<int> &);
     void    addTile(int, int);
 
     Field &operator=(const Field &);
 
 
     int findFinalPos(int);
-    void genSolvedGrid();
+//    void genSolvedGrid();
     s_tile * getTiles() const;
     int &getSize();
     int &getRows();

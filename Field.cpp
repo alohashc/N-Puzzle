@@ -60,48 +60,6 @@ std::string Field::genHashEnd() {
     return hash;
 }
 
-void Field::genSolvedGrid() {
-    int val = 1;
-    int left = 0;
-    int top = 0;
-    int right = this->field_rows;
-    int bottom = this->field_rows;
-    int a[this->field_rows][this->field_rows];
-
-    while (top < bottom && left < right) {
-        for (int i = top; i < bottom; i++)
-            a[left][i] = val++;
-        left++;
-
-        for (int i = left; i < right; i++)
-            a[i][bottom - 1] = val++;
-        bottom--;
-
-        if (left < right)
-        {
-            for (int i = bottom - 1; i >= top; --i)
-                a[right - 1][i] = val++;
-            right--;
-        }
-
-        if (top < bottom)
-        {
-            for (int i = right - 1; i >= left; --i)
-                a[i][top] = val++;
-            top++;
-        }
-    }
-
-    for (int i = 0; i < this->field_rows; ++i) {
-        for (int j = 0; j < this->field_rows; ++j) {
-            if (a[i][j] == this->field_size)
-                this->target.push_back(0);
-            else
-                this->target.push_back(a[i][j]);
-        }
-    }
-}
-
 int Field::findFinalPos(int value) {
     for (int i = 0; i < this->target.size(); ++i) {
         if (this->target[i] == value)
@@ -127,10 +85,10 @@ void Field::print_target() {
         std::cerr << it << std::endl;
 }
 
-void Field::init(int size, int rows, std::string & heuristic) {
+void Field::init(int size, int rows, std::string & heuristic, std::vector<int> & target) {
     this->field_size = size;
     this->field_rows = rows;
+    this->target = target;
     this->tiles = new s_tile[this->field_size];
-    this->genSolvedGrid();
     this->heuristics.init(heuristic, size);
 }
