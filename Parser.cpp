@@ -17,11 +17,8 @@ Parser::Parser(char **av, std::string & flag) {
     if (flag == "g") {
         this->heuristic = av[3];
         isValidGrid(std::stoi(av[2]));
-        this->genSolvedField();
+        this->start->init(this->field_size, this->field_rows, this->heuristic, this->target);
         this->genRandomField(std::stoi(av[2]));
-//        this->start->init(this->field_size, rows, this->heuristic, this->target);
-//        this->heuristic = av[3];
-//        isValidGrid(std::stoi(av[2]));
     }
 }
 
@@ -48,6 +45,7 @@ void Parser::isValidTile(int value) {
     if (this->setOfValues.size() == len)
         throw Exceptions("Error: Duplicate value");
     this->start->addTile(value, this->cnt);
+    this->values.push_back(value);
     this->cnt++;
 }
 
@@ -57,12 +55,13 @@ void Parser::isValidGrid(int rows) {
     this->field_rows = rows;
     this->field_size = rows * rows;
     this->genSolvedField();
-    this->start->init(this->field_size, rows, this->heuristic, this->target);
+//    this->start->init(this->field_size, rows, this->heuristic, this->target);
 }
 
 void Parser::run() {
-//    std::regex comments(R"(^#[a-zA-Z\s\d]+|^\s+#[a-zA-Z\s\d]+|^[\d\s]+#[a-zA-Z\s\d]+)");
+    bool isSolved = false;
     std::regex values("\\d+");
+    std::regex comments("\\#[\\s*a-zA-Z]+[a-zA-Z]$");
     std::string line;
 
     while (getline(this->ifs, line)) {
@@ -72,11 +71,17 @@ void Parser::run() {
         for (; begin != end; ++begin) {
             if (!this->field_rows) {
                 this->isValidGrid(std::stoi((*begin).str()));
+                this->start->init(this->field_size, this->field_rows, this->heuristic, this->target);
+                if (line.size() > 1)
+                    throw Exceptions("Error: Invalid input field size");
                 continue;
             }
             this->isValidTile(std::stoi((*begin).str()));
         }
     }
+    isSolved = this->checkSolving();
+    if (!isSolved)
+        throw Exceptions("ERROR: NOT SOLVED");
 //    this->start->print_tiles();
 }
 
@@ -86,17 +91,61 @@ void Parser::isValidInputArgs(char *filename) {
     this->ifs.exceptions(std::ifstream::badbit);
 }
 
+int Parser::gapFromBottom() {
+    int cnt_row = 0;
+    // start from bottom-right corner of matrix
+    for (int i = this->field_size; i >= 0; i--) {
+        if (i % this->field_rows == 0)
+            cnt_row++;
+        if (this->values[i - 1] == 0)
+            return cnt_row;
+    }
+}
+
+int Parser::countInv() {
+    int inv_count = 0;
+    for (int i = 0; i < this->values.size() - 1; i++)
+    {
+        for (int j = i + 1; j < this->values.size(); j++)
+        {
+            // count pairs(i, j) such that i appears
+            // before j, but i > j.
+            if (this->values[j] && this->values[i] && this->values[i] > this->values[j])
+                inv_count++;
+        }
+    }
+    return inv_count;
+}
+
+
+bool Parser::checkSolving() {
+    int inv = this->countInv();
+    int gap_row = this->gapFromBottom();
+
+    if (this->field_rows % 2 != 0)
+        return !(inv % 2);
+    else{
+        if (gap_row % 2)
+            return !(inv % 2);
+        else
+            return inv % 2;
+    }
+}
+
 void Parser::genRandomField(int rows) {
+    bool isSolved = false;
     if (rows < MIN_ROWS && rows > MAX_ROWS)
         throw Exceptions("Error: Invalid rows value");
     this->start->init(rows * rows, rows, this->heuristic, this->target);
-    std::default_random_engine generator;
-    std::uniform_int_distribution<int> distribution(0, rows * rows - 1);
+    srand((int)time(0));
 
-    while (this->setOfValues.size() < rows * rows){
-        int res = distribution(generator);
-        this->setOfValues.insert(res);
+    while (this->setOfValues.size() < this->field_size){
+        int res = (rand() % (this->field_size)) + 1;
+        this->setOfValues.insert(res == this->field_size ? 0 : res);
     }
+    isSolved = this->checkSolving();
+    if (!isSolved)
+        throw Exceptions("ERROR: NOT SOLVED");
     for (auto it : this->setOfValues) {
         this->start->addTile(it, this->cnt);
         this->cnt++;

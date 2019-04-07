@@ -11,6 +11,8 @@
 #include <regex>
 #include <random>
 #include <unordered_set>
+#include <cstdlib>
+#include <ctime>
 
 class Parser {
 public:
@@ -24,6 +26,9 @@ public:
     Field* getField();
     void genSolvedField();
     void genRandomField(int);
+    bool checkSolving();
+    int countInv();
+    int gapFromBottom();
 
     void print_grid();
 
@@ -32,6 +37,7 @@ private:
     int    field_size;
     std::vector<int> solvable_pos;
     std::vector<int> target;
+    std::vector<int> values;
     int    field_rows;
     std::unordered_set<int> setOfValues;
     std::ifstream ifs;
