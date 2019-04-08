@@ -31,8 +31,8 @@ public:
     int countInv(std::vector<int> &);
     int gapFromBottom();
     int retGapPos(std::vector<int> &);
-
-    void print_grid();
+    void Generate();
+    void print_grid(std::vector<int>&);
 
 private:
     Field   *start;

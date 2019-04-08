@@ -26,9 +26,9 @@ Parser::~Parser() {
 
 }
 
-void Parser::print_grid() {
-    for (int setOfValue : this->setOfValues)
-        std::cerr << setOfValue << std::endl;
+void Parser::print_grid(std::vector<int> &arr) {
+    for (int it : arr)
+        std::cout << it << std::endl;
     std::cout << "---------------" << std::endl;
 }
 
@@ -79,9 +79,9 @@ void Parser::run() {
             this->isValidTile(std::stoi((*begin).str()));
         }
     }
-//    isSolved = this->snailChecking();
-//    if (!isSolved)
-//        throw Exceptions("ERROR: NOT SOLVED");
+    isSolved = this->snailChecking();
+    if (!isSolved)
+        throw Exceptions("ERROR: NOT SOLVED");
 //    this->start->print_tiles();
 }
 
@@ -128,8 +128,8 @@ bool Parser::snailChecking() {
     int invFinal = this->countInv(this->target);
 
     if (this->field_size % 2 == 0) {
-        invCurr += int(this->retGapPos(this->values) / this->field_size);
-        invFinal += int(this->retGapPos(this->target) / this->field_size);
+        invCurr += int(this->retGapPos(this->values) / this->field_rows);
+        invFinal += int(this->retGapPos(this->target) / this->field_rows);
     }
     return invCurr % 2 == invFinal % 2;
 }
@@ -148,24 +148,51 @@ bool Parser::checkSolving() {
     }
 }
 
+void Parser::Generate() {
+    std::vector<int> possibleValues;
+    for (int i = 0; i < field_size; ++i) {
+        possibleValues.push_back(i);
+    }
+
+    int number = 0;
+    int index = 0;
+    srand((int)time(0));
+    std::vector<int> tmp(field_size);
+    for (auto &it : tmp) {
+        index = rand() % possibleValues.size();
+        number = possibleValues[index];
+        it = number;
+        const auto delIt = std::find(possibleValues.begin(), possibleValues.end(), number);
+        possibleValues.erase(delIt);
+    }
+    values = tmp;
+    print_grid(values);
+}
+
 void Parser::genRandomField(int rows) {
     bool isSolved = false;
     if (rows < MIN_ROWS && rows > MAX_ROWS)
         throw Exceptions("Error: Invalid rows value");
     this->start->init(rows * rows, rows, this->heuristic, this->target);
-    srand((int)time(0));
 
-    while (this->setOfValues.size() < this->field_size){
-        int res = (rand() % (this->field_size)) + 1;
-        this->setOfValues.insert(res == this->field_size ? 0 : res);
+    int i = 0;
+    while (1) {
+        std::cout << "Generate iter: " << i << std::endl;
+        ++i;
+        values.clear();
+        Generate();
+        isSolved = this->snailChecking();
+        std::cout << "WTF: " << isSolved << std::endl;
+        if (isSolved)
+            break;
     }
-    isSolved = this->checkSolving();
-    if (!isSolved)
-        throw Exceptions("ERROR: NOT SOLVED");
-    for (auto it : this->setOfValues) {
+
+    for (auto it : this->values) {
         this->start->addTile(it, this->cnt);
         this->cnt++;
     }
+    if (!isSolved)
+        throw Exceptions("ERROR: NOT SOLVED");
 }
 
 void Parser::genSolvedField() {
