@@ -27,8 +27,10 @@ public:
     void genSolvedField();
     void genRandomField(int);
     bool checkSolving();
-    int countInv();
+    bool snailChecking();
+    int countInv(std::vector<int> &);
     int gapFromBottom();
+    int retGapPos(std::vector<int> &);
 
     void print_grid();
 

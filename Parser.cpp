@@ -79,9 +79,9 @@ void Parser::run() {
             this->isValidTile(std::stoi((*begin).str()));
         }
     }
-    isSolved = this->checkSolving();
-    if (!isSolved)
-        throw Exceptions("ERROR: NOT SOLVED");
+//    isSolved = this->snailChecking();
+//    if (!isSolved)
+//        throw Exceptions("ERROR: NOT SOLVED");
 //    this->start->print_tiles();
 }
 
@@ -102,24 +102,40 @@ int Parser::gapFromBottom() {
     }
 }
 
-int Parser::countInv() {
+int Parser::countInv(std::vector<int> &arr) {
     int inv_count = 0;
-    for (int i = 0; i < this->values.size() - 1; i++)
+    for (int i = 0; i < arr.size() - 1; i++)
     {
-        for (int j = i + 1; j < this->values.size(); j++)
+        for (int j = i + 1; j < arr.size(); j++)
         {
             // count pairs(i, j) such that i appears
             // before j, but i > j.
-            if (this->values[j] && this->values[i] && this->values[i] > this->values[j])
+            if (arr[j] && arr[i] && arr[i] > arr[j])
                 inv_count++;
         }
     }
     return inv_count;
 }
 
+int Parser::retGapPos(std::vector<int> & arr) {
+    for (int i = 0; i < arr.size(); ++i)
+        if (arr[i] == 0)
+            return i;
+}
+
+bool Parser::snailChecking() {
+    int invCurr = this->countInv(this->values);
+    int invFinal = this->countInv(this->target);
+
+    if (this->field_size % 2 == 0) {
+        invCurr += int(this->retGapPos(this->values) / this->field_size);
+        invFinal += int(this->retGapPos(this->target) / this->field_size);
+    }
+    return invCurr % 2 == invFinal % 2;
+}
 
 bool Parser::checkSolving() {
-    int inv = this->countInv();
+    int inv = this->countInv(this->values);
     int gap_row = this->gapFromBottom();
 
     if (this->field_rows % 2 != 0)
