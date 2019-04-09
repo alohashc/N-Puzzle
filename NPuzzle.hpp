@@ -19,7 +19,7 @@ struct  s_tile {
     std::pair<int, int> end_pos;
 };
 
-struct s_state{
+struct s_state {
     int                     f;
     int                     g;
     int                     h;
@@ -28,13 +28,11 @@ struct s_state{
     s_state *               parent;
     s_tile  *               tiles;
     std::vector<s_state>    children;
-
 };
 
-struct s_cmp : public std::binary_function<s_state, s_state, bool> {
-    bool operator()(s_state const& lhs, s_state const &rhs) const {
-        return (lhs.f > rhs.f);
+struct compareQueue {
+    bool operator()(const s_state &first, const s_state &second) {
+        return first.f > second.f;
     }
 };
-
 #endif //ALOHA_PUZZLE_NPUZZLE_HPP

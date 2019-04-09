@@ -31,6 +31,12 @@ int main(int ac, char **av) {
         Parser parser(av, flag);
         Solver solver(parser.getField());
     }
+    catch (const char *ex) {
+        std::cout << ex << std::endl;
+    }
+    catch (const std::string &ex) {
+        std::cout << ex << std::endl;
+    }
     catch (Exceptions &e) {
         e.what();
     }

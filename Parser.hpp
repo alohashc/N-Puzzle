@@ -13,6 +13,7 @@
 #include <unordered_set>
 #include <cstdlib>
 #include <ctime>
+#include <sstream>
 
 class Parser {
 public:
@@ -25,7 +26,7 @@ public:
     void isValidTile(int);
     Field* getField();
     void genSolvedField();
-    void genRandomField(int);
+    void genRandomField();
     bool checkSolving();
     bool snailChecking();
     int countInv(std::vector<int> &);
@@ -36,12 +37,11 @@ public:
 
 private:
     Field   *start;
-    int    field_size;
+    int    field_size = 0;
     std::vector<int> solvable_pos;
     std::vector<int> target;
     std::vector<int> values;
-    int    field_rows;
-    std::unordered_set<int> setOfValues;
+    int    field_rows = 0;
     std::ifstream ifs;
     std::string   heuristic;
     int     cnt;

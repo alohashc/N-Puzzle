@@ -35,7 +35,10 @@ private:
     std::string                 hash_end;
     std::map<std::string, int> open;     // <HASH, F>
     std::map<std::string, int> closed;   // <HASH, F>
-    std::priority_queue<s_state, std::vector<s_state>, s_cmp>	queue;
+    std::priority_queue<s_state, std::vector<s_state>, compareQueue> queue;
+    int totalOpenedSets = 0;
+    int maxOpenedSets = 0;
+    int moves = 0;
 };
 
 

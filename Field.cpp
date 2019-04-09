@@ -17,12 +17,16 @@ Field::~Field() {
 }
 
 Field& Field::operator=(const Field &src) {
+    if (this == &src)
+        return *this;
     this->field_rows = src.field_rows;
     this->field_size = src.field_size;
     this->gap = src.gap;
     this->tiles = src.getTiles();
     this->heuristics = src.heuristics;
     this->target = src.target;
+
+    return *this;
 }
 
 void Field::print_tiles() {
@@ -61,10 +65,11 @@ std::string Field::genHashEnd() {
 }
 
 int Field::findFinalPos(int value) {
-    for (int i = 0; i < this->target.size(); ++i) {
-        if (this->target[i] == value)
-            return i;
-    }
+    const auto it = std::find(target.begin(), target.end(), value);
+    if (it == target.end())
+        throw "How the hell did this shit happen.";
+
+    return it - target.begin();
 }
 
 void Field::addTile(int value, int pos) {
@@ -76,7 +81,7 @@ void Field::addTile(int value, int pos) {
     this->tiles[pos].end_pos.first = solved_pos % this->field_rows;
     this->tiles[pos].end_pos.second = solved_pos / this->field_rows;
 
-    if (value == 0)
+    if (!value)
         this->gap = pos;
 }
 

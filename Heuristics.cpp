@@ -76,27 +76,28 @@ int Heuristics::euclidean() {
 
 int			Heuristics::LinearConflict()
 {
-    int		conflicts = 0;
-    for (int i = 0; i < this->size; ++i)
+    int conflicts = 0;
+
+    for (int i = 0; i < size; ++i)
     {
-        for (int j = this->tile[i].curr_pos.second * this->rows; j < this->tile[i].curr_pos.second * sqrt(this->size) + sqrt(this->size); ++j) // check just the same row
+        for (int j = tile[i].curr_pos.second * rows; j < (tile[i].curr_pos.second + 1) * rows; ++j) // check just the same row
         {
-            if (this->tile[i].value != this->tile[j].value			// jump itself
-                && this->tile[i].curr_pos.second == this->tile[i].end_pos.second 		// i is in its goal row
-                && this->tile[j].curr_pos.second == this->tile[j].end_pos.second 		// j is in its goal row
-                && this->tile[i].curr_pos.first > this->tile[j].curr_pos.first			// i is to the right of j
-                && this->tile[i].end_pos.first <= this->tile[j].end_pos.first)	// i goal is to the left of j position (or in j position)
+            if (tile[i].value != tile[j].value			// jump itself
+                && tile[i].curr_pos.second == tile[i].end_pos.second 		// i is in its goal row
+                && tile[j].curr_pos.second == tile[j].end_pos.second 		// j is in its goal row
+                && tile[i].curr_pos.first > tile[j].curr_pos.first			// i is to the right of j
+                && tile[i].end_pos.first <= tile[j].end_pos.first)	// i goal is to the left of j position (or in j position)
             {
                 ++conflicts;
             }
         }
-        for (int j = this->tile[i].curr_pos.first * this->rows; j < this->tile[i].curr_pos.first * sqrt(this->size) + sqrt(this->size); j += sqrt(this->size)) // check just the same col
+        for (int j = tile[i].curr_pos.first * rows; j < (tile[i].curr_pos.first + 1) * rows; j += rows) // check just the same col
         {
-            if (this->tile[i].value != this->tile[j].value			// jump itself
-                && this->tile[i].curr_pos.first == this->tile[i].end_pos.first 		// i is in its goal col
-                && this->tile[j].curr_pos.first == this->tile[j].end_pos.first 		// j is in its goal col
-                && this->tile[i].curr_pos.second > this->tile[j].curr_pos.second			// i is under j
-                && this->tile[i].end_pos.second <= this->tile[j].end_pos.second)	// i goal is over j position (or in j position)
+            if (tile[i].value != tile[j].value			// jump itself
+                && tile[i].curr_pos.first == tile[i].end_pos.first 		// i is in its goal col
+                && tile[j].curr_pos.first == tile[j].end_pos.first 		// j is in its goal col
+                && tile[i].curr_pos.second > tile[j].curr_pos.second			// i is under j
+                && tile[i].end_pos.second <= tile[j].end_pos.second)	// i goal is over j position (or in j position)
             {
                 ++conflicts;
             }
@@ -108,20 +109,20 @@ int			Heuristics::LinearConflict()
 int Heuristics::cornerTiles() {
     int conflicts = 0;
 
-    if (this->tile[0].value != 1) {
-        if (this->tile[1].value == 2 || this->tile[this->rows].value == this->rows + 1)
+    if (tile[0].value != 1) {
+        if (tile[1].value == 2 || tile[rows].value == rows + 1)
             conflicts += 1;
     }
-    if (this->tile[this->rows - 1].value != this->rows) {
-        if (this->tile[this->rows - 2].value == this->rows - 1 || this->tile[this->rows * 2 - 1].value == this->rows + 1)
+    if (tile[rows - 1].value != rows) {
+        if (tile[rows - 2].value == rows - 1 || tile[rows * 2 - 1].value == rows + 1)
             conflicts += 1;
     }
-    if (this->tile[this->size - this->rows].value != this->rows * 3 - 2) {
-        if (this->tile[this->size - this->rows].value == this->rows * 3 - 1 || this->tile[this->size - this->rows + 1].value == this->rows * 3 - 3)
+    if (tile[size - rows].value != rows * 3 - 2) {
+        if (tile[size - rows].value == rows * 3 - 1 || tile[size - rows + 1].value == rows * 3 - 3)
             conflicts += 1;
     }
-    if (this->tile[this->size - 1].value != this->rows * 2 - 1) {
-        if (this->tile[this->size - 2].value == this->rows * 2 || this->tile[this->size - this->rows - 1].value == this->rows * 2 - 2)
+    if (tile[size - 1].value != rows * 2 - 1) {
+        if (tile[size - 2].value == rows * 2 || tile[size - rows - 1].value == rows * 2 - 2)
             conflicts += 1;
     }
     return Heuristics::manhattan() + 2 * conflicts;

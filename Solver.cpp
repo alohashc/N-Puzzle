@@ -30,6 +30,7 @@ void Solver::exitAndOutput(s_state *node) {
 
     while (node->parent)
     {
+        ++this->moves;
         this->_output.push_front(this->print(node->tiles));
         node = node->parent;
     }
@@ -37,7 +38,12 @@ void Solver::exitAndOutput(s_state *node) {
     {
         std::cout << *it << std::endl;
     }
-    std::cout << "SUCCESS";
+    std::cout << "Complexity in time: \033[1;32m" << this->totalOpenedSets << "\033[0m" << std::endl;
+    std::cout << "Complexity in size: \033[1;32m" << this->maxOpenedSets << "\033[0m" << std::endl;
+    std::cout << "Number of moves required to transition from the initial state to the final state: " <<
+                 "\033[1;32m" << this->moves << "\033[0m" << std::endl;
+
+
     exit(0);
 }
 
@@ -69,15 +75,18 @@ void Solver::createChildState(s_state* state, int gap_pos, int new_pos) {
 void Solver::getChildren(s_state *state) {
     int up = state->gap_pos - this->field->getRows();
     int down = state->gap_pos + this->field->getRows();
+    int prev = state->gap_pos - 1;
+    int next = state->gap_pos + 1;
 
     if (up >= 0)
         this->createChildState(state, state->gap_pos, up);
-    if (state->gap_pos % this->field->getRows() != this->field->getRows() - 1)
-        this->createChildState(state, state->gap_pos, state->gap_pos + 1);
     if (down < this->field->getSize())
         this->createChildState(state, state->gap_pos, down);
-    if (state->gap_pos % this->field->getRows() != 0)
-        this->createChildState(state, state->gap_pos, state->gap_pos - 1);
+
+    if (next < field->getSize() && next / field->getRows() == state->gap_pos / field->getRows())
+        this->createChildState(state, state->gap_pos, next);
+    if (prev >= 0 && prev / field->getRows() == state->gap_pos / field->getRows())
+        this->createChildState(state, state->gap_pos, prev);
 }
 
 bool Solver::isExists(std::map<std::string, int>& map, s_state & state) {
@@ -116,6 +125,8 @@ void Solver::aStar() {
                 it.parent = new s_state(curr);
                 this->queue.push(it);
                 this->open.emplace(it.hash, it.f);
+                ++totalOpenedSets;
+                maxOpenedSets = std::max(maxOpenedSets, static_cast<int>(this->open.size()));
             }
         }
     }
@@ -145,11 +156,14 @@ void Solver::init(Field *field) {
     start.f = start.g + start.h;
     this->queue.push(start);
     this->open.emplace(this->genHash(start.tiles), start.f);
+    ++totalOpenedSets;
+    maxOpenedSets = 1;
 }
 
 std::string			Solver::print(s_tile * state)
 {
     std::stringstream	out;
+
 
     for (int i = 0; i < this->field->getSize(); ++i)
     {
