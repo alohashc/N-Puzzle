@@ -1,13 +1,5 @@
-#include "Gen.hpp"
 #include "Parser.hpp"
 #include "Solver.hpp"
-
-void usage() {
-    std::cerr << "Usage: ./npuzzle <flag: 'f'=file or 'g'=generate>" << std::endl;
-    std::cerr << "       ./npuzzle f <filename> <heuristic>" << std::endl;
-    std::cerr << "       ./npuzzle g <field size> <heuristic>" << std::endl;
-    exit(1);
-}
 
 std::string inputArgs(int ac, char **av) {
     if (ac == 4) {
@@ -20,14 +12,19 @@ std::string inputArgs(int ac, char **av) {
             return flag;
         }
     }
-    usage();
+
+    std::stringstream ss;
+    ss << "Usage: ./npuzzle <flag: 'f'=file or 'g'=generate>" << std::endl;
+    ss << "       ./npuzzle f <filename> <heuristic>" << std::endl;
+    ss << "       ./npuzzle g <field size> <heuristic>" << std::endl;
+    throw ss.str();
 }
 
 int main(int ac, char **av) {
     std::string flag;
 
-    flag = inputArgs(ac, av);
     try {
+        flag = inputArgs(ac, av);
         Parser parser(av, flag);
         Solver solver(parser.getField());
     }
@@ -37,8 +34,11 @@ int main(int ac, char **av) {
     catch (const std::string &ex) {
         std::cout << ex << std::endl;
     }
-    catch (Exceptions &e) {
+    catch (const Exceptions &e) {
         e.what();
     }
+//    catch (const std::exception &ex) {
+//        std::cout << ex.what() << std::endl;
+//    }
     return 0;
 }

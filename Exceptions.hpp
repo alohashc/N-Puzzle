@@ -5,7 +5,6 @@
 #ifndef ALOHA_PUZZLE_EXCEPTIONS_HPP
 #define ALOHA_PUZZLE_EXCEPTIONS_HPP
 
-
 #include <exception>
 #include <iostream>
 
@@ -19,13 +18,6 @@ public:
 private:
     std::string msg;
 };
-
-
-//class FieldExceptions : public Exceptions {
-//public:
-//    FieldExceptions();
-//    virtual char const* what() const throw();
-//};
 
 
 #endif //ALOHA_PUZZLE_EXCEPTIONS_HPP

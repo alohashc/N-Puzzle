@@ -8,30 +8,39 @@
 #include <iostream>
 #include <vector>
 #include <utility>
+#include <fstream>
+#include <regex>
+#include <random>
+#include <cstdlib>
+#include <ctime>
+#include <sstream>
+#include <queue>
+#include <algorithm>
+#include <list>
 #include "Exceptions.hpp"
 
 #define MIN_ROWS 3
 #define MAX_ROWS 5
 
-struct  s_tile {
-    int     value;
+struct  Tile {
+    int value;
     std::pair<int, int> curr_pos;
     std::pair<int, int> end_pos;
 };
 
-struct s_state {
-    int                     f;
-    int                     g;
-    int                     h;
-    int                     gap_pos;
-    std::string             hash;
-    s_state *               parent;
-    s_tile  *               tiles;
-    std::vector<s_state>    children;
+struct State {
+    State *parent;
+    Tile  *tiles;
+    int f;
+    int g;
+    int h;
+    int gap_pos;
+    std::string hash;
+    std::vector<State> children;
 };
 
 struct compareQueue {
-    bool operator()(const s_state &first, const s_state &second) {
+    bool operator()(const State &first, const State &second) {
         return first.f > second.f;
     }
 };

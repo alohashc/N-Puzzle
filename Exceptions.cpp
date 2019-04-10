@@ -9,7 +9,7 @@ Exceptions::Exceptions() : std::exception() {
 }
 
 Exceptions::Exceptions(const std::string &str) {
-    this->msg = str;
+    msg = str;
 }
 
 
@@ -18,5 +18,5 @@ Exceptions::~Exceptions() throw() {
 }
 
 char const* Exceptions::what() const throw() {
-    std::cerr << this->msg << std::endl;
+    std::cerr << msg << std::endl;
 }

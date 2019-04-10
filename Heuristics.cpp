@@ -5,14 +5,14 @@
 #include "Heuristics.hpp"
 
 Heuristics::Heuristics() {
-    this->size = 0;
-    this->tile = nullptr;
-    this->name = "";
-    this->heuristics.emplace("m", &Heuristics::manhattan);
-    this->heuristics.emplace("mt", &Heuristics::misplacedTile);
-    this->heuristics.emplace("eu", &Heuristics::euclidean);
-    this->heuristics.emplace("lc", &Heuristics::LinearConflict);
-    this->heuristics.emplace("ct", &Heuristics::cornerTiles);
+    size = 0;
+    tile = nullptr;
+    name = "";
+    heuristics.emplace("m", &Heuristics::manhattan);
+    heuristics.emplace("mt", &Heuristics::misplacedTile);
+    heuristics.emplace("eu", &Heuristics::euclidean);
+    heuristics.emplace("lc", &Heuristics::LinearConflict);
+    heuristics.emplace("ct", &Heuristics::cornerTiles);
 }
 
 
@@ -21,23 +21,24 @@ Heuristics::~Heuristics() {
 }
 
 Heuristics& Heuristics::operator=(const Heuristics &src) {
-    this->name = src.name;
-    this->tile = src.tile;
-    this->size = src.size;
-    this->rows = sqrt(this->size);
-    this->heuristics = src.heuristics;
+    name = src.name;
+    tile = src.tile;
+    size = src.size;
+    rows = sqrt(size);
+    heuristics = src.heuristics;
+    return *this;
 }
 
-int Heuristics::getH(s_tile *tiles) {
-    this->tile = tiles;
+int Heuristics::getH(Tile *tiles) {
+    tile = tiles;
     int (Heuristics::*f)();
-    f = this->heuristics.at(this->name);
+    f = this->heuristics.at(name);
 
     return (this->*f)();
 }
 
 void Heuristics::init(std::string & name, int size) {
-    if (!this->heuristics[name])
+    if (!heuristics[name])
         throw Exceptions("Error: Invalid heuristic");
     this->name = name;
     this->size = size;
@@ -46,19 +47,19 @@ void Heuristics::init(std::string & name, int size) {
 int Heuristics::manhattan() {
     int     res_h = 0;
 
-    for (int i = 0; i < this->size; ++i)
-        res_h += std::abs(this->tile[i].curr_pos.first - this->tile[i].end_pos.first) +
-                std::abs(this->tile[i].curr_pos.second - this->tile[i].end_pos.second);
+    for (int i = 0; i < size; ++i)
+        res_h += std::abs(tile[i].curr_pos.first - tile[i].end_pos.first) +
+                std::abs(tile[i].curr_pos.second - tile[i].end_pos.second);
     return (res_h);
 }
 
 int Heuristics::misplacedTile() {
     int cnt = 0;
 
-    for (int i = 0; i < this->size; ++i){
+    for (int i = 0; i < size; ++i){
 
-        if (this->tile[i].curr_pos.first != this->tile[i].end_pos.first ||
-                this->tile[i].curr_pos.second != this->tile[i].end_pos.second)
+        if (tile[i].curr_pos.first != tile[i].end_pos.first ||
+                tile[i].curr_pos.second != tile[i].end_pos.second)
             cnt++;
     }
     return cnt;
@@ -67,9 +68,9 @@ int Heuristics::misplacedTile() {
 int Heuristics::euclidean() {
     int res_h = 0;
 
-    for (int i = 0; i < this->size; ++i){
-        res_h += sqrt(pow((this->tile[i].curr_pos.first - this->tile[i].end_pos.first), 2) +
-                             pow((this->tile[i].curr_pos.second != this->tile[i].end_pos.second), 2));
+    for (int i = 0; i < size; ++i){
+        res_h += sqrt(pow((tile[i].curr_pos.first - tile[i].end_pos.first), 2) +
+                             pow((tile[i].curr_pos.second != tile[i].end_pos.second), 2));
     }
     return res_h;
 }

@@ -7,7 +7,6 @@
 
 #include "NPuzzle.hpp"
 #include "Heuristics.hpp"
-#include <set>
 
 class Field {
 public:
@@ -20,26 +19,22 @@ public:
 
     Field &operator=(const Field &);
 
-
     int findFinalPos(int);
-//    void genSolvedGrid();
-    s_tile * getTiles() const;
+    std::string genHashEnd();
+
+    Tile * getTiles() const;
     int &getSize();
     int &getRows();
     int &getGapPos();
-    int getHeuristic(s_tile*);
-    std::string genHashEnd();
-    void print_tiles();
-    void print_target();
+    int getHeuristic(Tile*);
 
 private:
-    int     field_size;
-    int     field_rows;
-
     std::vector<int>  target;
     Heuristics heuristics;
-    int     gap;
-    s_tile* tiles;
+    Tile* tiles;
+    int field_size;
+    int field_rows;
+    int gap;
 };
 
 

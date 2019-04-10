@@ -19,47 +19,40 @@ Field::~Field() {
 Field& Field::operator=(const Field &src) {
     if (this == &src)
         return *this;
-    this->field_rows = src.field_rows;
-    this->field_size = src.field_size;
-    this->gap = src.gap;
-    this->tiles = src.getTiles();
-    this->heuristics = src.heuristics;
-    this->target = src.target;
+    field_rows = src.field_rows;
+    field_size = src.field_size;
+    gap = src.gap;
+    tiles = src.getTiles();
+    heuristics = src.heuristics;
+    target = src.target;
 
     return *this;
 }
 
-void Field::print_tiles() {
-    for (int i = 0; i < this->field_size; ++i) {
-        std::cerr << this->tiles[i].value << std::endl;
-        std::cerr << this->tiles[i].curr_pos.first << " " << this->tiles[i].curr_pos.second << std::endl;
-    }
-}
-
-s_tile* Field::getTiles() const{
-    return this->tiles;
+Tile* Field::getTiles() const{
+    return tiles;
 }
 
 int& Field::getSize() {
-    return this->field_size;
+    return field_size;
 }
 
 int& Field::getRows() {
-    return this->field_rows;
+    return field_rows;
 }
 
 int& Field::getGapPos() {
-    return this->gap;
+    return gap;
 }
 
-int Field::getHeuristic(s_tile *tiles) {
-    return this->heuristics.getH(tiles);
+int Field::getHeuristic(Tile *tiles) {
+    return heuristics.getH(tiles);
 }
 
 std::string Field::genHashEnd() {
     std::string hash;
 
-    for (auto it : this->target)
+    for (auto it : target)
        hash += std::to_string(it) + ',';
     return hash;
 }
@@ -67,7 +60,7 @@ std::string Field::genHashEnd() {
 int Field::findFinalPos(int value) {
     const auto it = std::find(target.begin(), target.end(), value);
     if (it == target.end())
-        throw "How the hell did this shit happen.";
+        throw "Couldn't find element in target.";
 
     return it - target.begin();
 }
@@ -75,25 +68,20 @@ int Field::findFinalPos(int value) {
 void Field::addTile(int value, int pos) {
     int solved_pos = findFinalPos(value);
 
-    this->tiles[pos].value = value;
-    this->tiles[pos].curr_pos.first = pos % this->field_rows;
-    this->tiles[pos].curr_pos.second = pos / this->field_rows;
-    this->tiles[pos].end_pos.first = solved_pos % this->field_rows;
-    this->tiles[pos].end_pos.second = solved_pos / this->field_rows;
+    tiles[pos].value = value;
+    tiles[pos].curr_pos.first = pos % field_rows;
+    tiles[pos].curr_pos.second = pos / field_rows;
+    tiles[pos].end_pos.first = solved_pos % field_rows;
+    tiles[pos].end_pos.second = solved_pos / field_rows;
 
     if (!value)
-        this->gap = pos;
-}
-
-void Field::print_target() {
-    for (auto it: this->target)
-        std::cerr << it << std::endl;
+        gap = pos;
 }
 
 void Field::init(int size, int rows, std::string & heuristic, std::vector<int> & target) {
-    this->field_size = size;
-    this->field_rows = rows;
+    field_size = size;
+    field_rows = rows;
     this->target = target;
-    this->tiles = new s_tile[this->field_size];
-    this->heuristics.init(heuristic, size);
+    tiles = new Tile[field_size];
+    heuristics.init(heuristic, size);
 }

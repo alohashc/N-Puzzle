@@ -9,7 +9,7 @@
 #include <map>
 #include <cmath>
 
-typedef int (*f)(s_tile*, int);
+typedef int (*f)(Tile*, int);
 
 class Heuristics {
 public:
@@ -17,7 +17,7 @@ public:
     ~Heuristics();
 
     Heuristics &operator=(const Heuristics &rhs);
-    int getH(s_tile*);
+    int getH(Tile*);
     void init(std::string&, int);
 
 private:
@@ -28,8 +28,8 @@ private:
     int     cornerTiles();
 
     std::string name;
-    s_tile *tile;
-    int     size;
+    Tile *tile;
+    int size;
     int rows;
     std::map<std::string, int (Heuristics::*)()> heuristics;
 };
